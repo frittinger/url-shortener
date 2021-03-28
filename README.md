@@ -29,6 +29,7 @@ Open in a browser: [localhost:8080/](localhost:8080/)
 - frontend is a basic react template with a simple form
 - packaging into docker container would be useful for deployment
 - superficial request mapping "/s" is needed to use default serving of static resources of spring boot
+- used ShortUrl for persistence and web layer
 
 ## Design considerations
 
