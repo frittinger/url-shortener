@@ -33,3 +33,11 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+task copyReactApp(type: Copy) {
+	from "react/build"
+	include "**/*"
+	into "$buildDir/resources/main/static"
+}
+
+copyReactApp.dependsOn(build)

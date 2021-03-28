@@ -12,8 +12,7 @@ A rudimentary URL shortener service.
 $ npm install
 $ npm run build
 $ cd ..
-$ cp react/build/*  into /src/main/resources/static
-$ gradle build
+$ gradle copyReactApp
 </code></pre>
 
 ### Running
