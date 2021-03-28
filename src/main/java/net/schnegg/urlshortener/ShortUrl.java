@@ -15,6 +15,7 @@ public class ShortUrl {
 
     @Id
     String id;
+    // note this will only handle URLs up to 255 chars
     String originalUrl;
     int shorteningCount;
     int redirectCount;

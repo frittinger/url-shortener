@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,33 +33,20 @@ class ShortUrlServiceTest {
     private ShortUrlRepository shortUrlRepository;
 
     @Test
-    void when_creating_new_short_url_then_id_is_created() {
+    void when_creating_new_short_url_then_id_is_created_and_counts_are_0() {
         // arrange
-        ShortUrl testShortUrl = new ShortUrl(ID, ORIGINAL_URL, SHORTENING_COUNT, REDIRECT_COUNT);
-        List<ShortUrl> testList = Arrays.asList(testShortUrl);
-        Mockito.when(shortUrlRepository.findByOriginalUrl(ORIGINAL_URL)).thenReturn(testList);
+        Mockito.when(shortUrlRepository.findByOriginalUrl(ORIGINAL_URL)).thenReturn(Collections.emptyList());
         // act
         ShortUrl shortUrl = shortUrlService.createOrUpdateShortUrl(ORIGINAL_URL);
         // assert
         assertThat(shortUrl.getId(), notNullValue());
         assertThat(shortUrl.getOriginalUrl(), is(ORIGINAL_URL));
-    }
-
-    @Test
-    void when_creating_new_short_url_then_redirect_count_is_zero_and_shortening_count_is_one() {
-        // arrange
-        ShortUrl testShortUrl = new ShortUrl(ID, ORIGINAL_URL, 0, 0);
-        List<ShortUrl> testList = Arrays.asList(testShortUrl);
-        Mockito.when(shortUrlRepository.findByOriginalUrl(ORIGINAL_URL)).thenReturn(testList);
-        // act
-        ShortUrl shortUrl = shortUrlService.createOrUpdateShortUrl(ORIGINAL_URL);
-        // assert
         assertThat(shortUrl.getRedirectCount(), is(0));
-        assertThat(shortUrl.getShorteningCount(), is(1));
+        assertThat(shortUrl.getShorteningCount(), is(0));
     }
 
     @Test
-    void when_creating_existing_short_url_then_shortening_count_is_incremented() {
+    void when_creating_existing_short_url_then_shortening_count_is_incremented_and_id_kept() {
         // arrange
         ShortUrl testShortUrl = new ShortUrl(ID, ORIGINAL_URL, SHORTENING_COUNT, 0);
         List<ShortUrl> testList = Arrays.asList(testShortUrl);
@@ -67,10 +55,11 @@ class ShortUrlServiceTest {
         ShortUrl shortUrl = shortUrlService.createOrUpdateShortUrl(ORIGINAL_URL);
         // assert
         assertThat(shortUrl.getShorteningCount(), is(SHORTENING_COUNT + 1));
+        assertThat(shortUrl.getId(), is(ID));
     }
 
     @Test
-    void when_redirect_called_redirect_counter_is_incremented() {
+    void when_redirect_called_for_existing_short_url_short_url_returned_and_redirect_counter_is_incremented() {
         // arrange
         ShortUrl testShortUrl = new ShortUrl(ID, ORIGINAL_URL, SHORTENING_COUNT, REDIRECT_COUNT);
         Mockito.when(shortUrlRepository.findById(testShortUrl.getId())).thenReturn(Optional.of(testShortUrl));
@@ -78,6 +67,8 @@ class ShortUrlServiceTest {
         ShortUrl shortUrl = shortUrlService.getShortUrlForRedirect(ID);
         // assert
         assertThat(shortUrl.getRedirectCount(), is(REDIRECT_COUNT + 1));
+        assertThat(shortUrl.getOriginalUrl(), is(ORIGINAL_URL));
+        assertThat(shortUrl.getId(), is(ID));
     }
 
     @Test

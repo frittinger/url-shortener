@@ -30,12 +30,12 @@ public class ShortUrlServiceImpl implements ShortUrlService {
         List<ShortUrl> shortUrls = shortUrlRepository.findByOriginalUrl(originalUrl);
 
         ShortUrl shortUrl;
-        if (null != shortUrls && !shortUrls.isEmpty()) {
-            shortUrl = shortUrls.get(0);
-            shortUrl.incrementShorteningCount();
-        } else {
+        if (shortUrls.isEmpty()) {
             String id = generateUniqueShortId();
             shortUrl = new ShortUrl(id, originalUrl, 0, 0);
+        } else {
+            shortUrl = shortUrls.get(0);
+            shortUrl.incrementShorteningCount();
         }
         shortUrlRepository.save(shortUrl);
         return shortUrl;
