@@ -17,10 +17,6 @@ class UrlshortenerApplicationTests {
 	private ShortUrlService shortUrlService;
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void when_application_starts_then_controller_is_non_null() {
 		assertThat(shortUrlController, notNullValue());
 	}
