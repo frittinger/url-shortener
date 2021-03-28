@@ -43,8 +43,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
 
     private String generateUniqueShortId() {
         String id = RandomStringUtils.randomAlphanumeric(8);
-        id = checkUniqueness(id);
-        return id;
+        return checkUniqueness(id);
     }
 
     private String checkUniqueness(String id) {
